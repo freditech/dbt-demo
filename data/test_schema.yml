@@ -1,0 +1,20 @@
+version: 2
+
+seeds:
+  - name: expected_output
+    tests: 
+      - dbt_utils.equal_rowcount:
+          compare_model:  ref('customer_nation_region_aggregate')
+      - dbt_utils.equality:
+          compare_model: ref('customer_nation_region_aggregate')
+    columns:
+      - name: nation
+        tests:
+          - dbt_utils.cardinality_equality:
+              field: nation
+              to: ref('customer_nation_region_aggregate')
+      - name: region
+        tests:
+          - dbt_utils.cardinality_equality:
+              field: region
+              to: ref('customer_nation_region_aggregate')

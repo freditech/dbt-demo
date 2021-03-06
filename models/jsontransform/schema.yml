@@ -1,0 +1,55 @@
+
+version: 2
+
+models:
+  - name: customer_nation_region
+    description: "Join of customer, nation and region."
+    columns:
+      - name: customer_name
+        tests: 
+          - unique
+          - not_null
+      - name: region
+        tests: 
+          - not_null
+      - name: nation
+        tests: 
+          - not_null
+
+  - name: avg_acctbal_by_nation
+    description: "Avg account balance."
+    columns:
+      - name: nation_key
+        tests: 
+          - unique
+          - not_null
+      - name: avg_acct_bal_by_nation
+        tests: 
+          - not_null
+
+  - name: customer_nation_region_aggregate
+    description: "Join of customer, nation and region."
+    tests:
+      - dbt_expectations.expect_table_row_count_to_equal:
+          value: 45
+      - dbt_expectations.expect_table_row_count_to_be_between:
+          min_value: 40
+          max_value: 60
+      - dbt_expectations.expect_table_row_count_to_equal_other_table:
+          compare_model: ref("customer_nation_region")
+      - dbt_expectations.expect_table_column_count_to_equal:
+          value: 7
+    columns:
+      - name: customer_name
+        tests: 
+          - unique
+          - not_null
+      - name: region
+        tests: 
+          - not_null
+      - name: nation
+        tests: 
+          - not_null
+      - name: avg_acct_bal_by_nation
+        tests: 
+          - not_null
